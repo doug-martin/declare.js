@@ -1,4 +1,4 @@
-var declare = require("../../declare.js");
+var declare = require("../../../declare.js");
 
 
 function _set(prop, val) {

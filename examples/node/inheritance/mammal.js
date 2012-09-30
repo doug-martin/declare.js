@@ -1,4 +1,4 @@
-var declare = require("../../index.js");
+var declare = require("../../../index.js");
 
 var Mammal = declare({
     //define your instance methods and properties

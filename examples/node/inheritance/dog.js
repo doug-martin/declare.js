@@ -1,4 +1,4 @@
-var declare = require("../../index.js"),
+var declare = require("../../../index.js"),
     Mammal = require("./mammal.js"),
     Wolf = require("./wolf.js");
 

@@ -1,6 +1,6 @@
 var Dog = require("../inheritance/dog"),
     WatchMixin = require("./watcher"),
-    declare = require("../../declare");
+    declare = require("../../../declare");
 
 var WatchDog = declare([Dog, WatchMixin]);
 

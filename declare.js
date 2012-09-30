@@ -1,4 +1,5 @@
 (function () {
+
     /**
      * @projectName declare
      * @github http://github.com/doug-martin/declare.js
@@ -255,10 +256,10 @@
      *
      * ###Multiple Inheritance / Mixins
      *
-     * define also allows the use of multiple super classes.
+     * declare also allows the use of multiple super classes.
      * This is useful if you have generic classes that provide functionality but shouldnt be used on their own.
      *
-     * Lets define a mixin that allows us to watch for property changes.
+     * Lets declare a mixin that allows us to watch for property changes.
      *
      * ```
      * //Notice that we set up the functions outside of declare because we can reuse them

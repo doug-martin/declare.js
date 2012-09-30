@@ -7,7 +7,7 @@
 
 `npm install declare.js`
 
-Or [download the source](http://github.com/doug-martin/declare.js/declare.js) ([minified](http://github.com/doug-martin/declare.js/declare-min.js))
+Or [download the source](https://raw.github.com/doug-martin/declare.js/master/declare.js) ([minified](http://github.com/doug-martin/declare.js/declare-min.js))
 
 
 ##Usage
@@ -252,7 +252,7 @@ myBreed.get("sound")" //"woof"
 
 ###Multiple Inheritance / Mixins
 
-define also allows the use of multiple super classes.
+declare also allows the use of multiple super classes.
 This is useful if you have generic classes that provide functionality but shouldnt be used on their own.
 
 Lets define a mixin that allows us to watch for property changes.
