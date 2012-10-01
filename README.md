@@ -7,7 +7,25 @@
 
 `npm install declare.js`
 
-Or [download the source](https://raw.github.com/doug-martin/declare.js/master/declare.js) ([minified](http://github.com/doug-martin/declare.js/declare-min.js))
+Or [download the source](http://github.com/doug-martin/declare.js/declare.js) ([minified](http://github.com/doug-martin/declare.js/declare-min.js))
+
+###Requirejs
+
+To use with requirejs place the `declare` source in the root scripts directory
+
+```javascript
+
+define(["declare"], function(declare){
+     return declare({
+         instance : {
+             hello : function(){
+                 return "world";
+             }
+         }
+     });
+});
+
+```
 
 
 ##Usage
@@ -94,7 +112,7 @@ myMammal.set("type", "mammal");
 myMammal.get("type"); //"mammal"
 
 
-```
+```javascript
 
 ###Extending a class
 
@@ -255,7 +273,7 @@ myBreed.get("sound")" //"woof"
 declare also allows the use of multiple super classes.
 This is useful if you have generic classes that provide functionality but shouldnt be used on their own.
 
-Lets define a mixin that allows us to watch for property changes.
+Lets declare a mixin that allows us to watch for property changes.
 
 ```javascript
 //Notice that we set up the functions outside of declare because we can reuse them
@@ -410,7 +428,7 @@ reproduce : function(options){
 
 Now in each subclass you can call reproduce and get the proper type.
 
-```
+```javascript
 var myDog = new Dog();
 var myDogsChild = myDog.reproduce();
 

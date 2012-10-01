@@ -13,6 +13,24 @@
      *
      * Or [download the source](http://github.com/doug-martin/declare.js/declare.js) ([minified](http://github.com/doug-martin/declare.js/declare-min.js))
      *
+     * ###Requirejs
+     *
+     * To use with requirejs place the `declare` source in the root scripts directory
+     *
+     * ```
+     *
+     * define(["declare"], function(declare){
+     *      return declare({
+     *          instance : {
+     *              hello : function(){
+     *                  return "world";
+     *              }
+     *          }
+     *      });
+     * });
+     *
+     * ```
+     *
      *
      * ##Usage
      *

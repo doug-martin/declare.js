@@ -173,8 +173,21 @@
 </p>
 <p>Or <a href="http://github.com/doug-martin/declare.js/declare.js">download the source</a> (<a href="http://github.com/doug-martin/declare.js/declare-min.js">minified</a>)
 
+</p>
+<h3>Requirejs</h3>
+<p>To use with requirejs place the <code>declare</code> source in the root scripts directory
 
 </p>
+<pre class='prettyprint linenums lang-js'><code>
+define([&quot;declare&quot;], function(declare){
+     return declare({
+         instance : {
+             hello : function(){
+                 return &quot;world&quot;;
+             }
+         }
+     });
+});</code></pre>
 <h2>Usage</h2>
 <p>declare.js provides
 
