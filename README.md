@@ -112,7 +112,7 @@ myMammal.set("type", "mammal");
 myMammal.get("type"); //"mammal"
 
 
-```javascript
+```
 
 ###Extending a class
 
