@@ -7,7 +7,7 @@
 
 `npm install declare.js`
 
-Or [download the source](http://github.com/doug-martin/declare.js/declare.js) ([minified](http://github.com/doug-martin/declare.js/declare-min.js))
+Or [download the source](https://raw.github.com/doug-martin/declare.js/master/declare.js) ([minified](https://raw.github.com/doug-martin/declare.js/master/declare-min.js))
 
 ###Requirejs
 
