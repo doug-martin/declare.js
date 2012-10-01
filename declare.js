@@ -455,353 +455,352 @@
      *
      *
      */
-    var arraySlice = Array.prototype.slice;
-    var classCounter = 0;
+    function createDeclared() {
+        var arraySlice = Array.prototype.slice, classCounter = 0, Base;
 
-    function argsToArray(args, slice) {
-        slice = slice || 0;
-        return arraySlice.call(args, slice);
-    }
-
-    function isArray(obj) {
-        return Object.prototype.toString.call(obj) === "[object Array]";
-    }
-
-    function isObject(obj) {
-        var undef;
-        return obj !== null && obj !== undef && typeof obj === "object";
-    }
-
-    function isHash(obj) {
-        var ret = isObject(obj);
-        return ret && obj.constructor === Object;
-    }
-
-    function callSuper(args, a) {
-        var meta = this.__meta,
-            supers = meta.supers,
-            l = supers.length, superMeta = meta.superMeta, pos = superMeta.pos;
-        if (l > pos) {
-            a && (args = a);
-            var name = superMeta.name, f = superMeta.f, m;
-            do {
-                m = supers[pos][name];
-                if ("function" === typeof m && (m = m._f || m) !== f) {
-                    superMeta.pos = 1 + pos;
-                    return m.apply(this, args);
-                }
-            } while (l > ++pos);
+        function argsToArray(args, slice) {
+            slice = slice || 0;
+            return arraySlice.call(args, slice);
         }
-        return null;
-    }
 
-    function getSuper() {
-        var meta = this.__meta,
-            supers = meta.supers,
-            l = supers.length, superMeta = meta.superMeta, pos = superMeta.pos;
-        if (l > pos) {
-            var name = superMeta.name, f = superMeta.f, m;
-            do {
-                m = supers[pos][name];
-                if ("function" === typeof m && (m = m._f || m) !== f) {
-                    superMeta.pos = 1 + pos;
-                    return m.bind(this);
-                }
-            } while (l > ++pos);
+        function isArray(obj) {
+            return Object.prototype.toString.call(obj) === "[object Array]";
         }
-        return null;
-    }
 
-    function getter(name) {
-        var getters = this.__getters__;
-        if (getters.hasOwnProperty(name)) {
-            return getters[name].apply(this);
-        } else {
-            return this[name];
+        function isObject(obj) {
+            var undef;
+            return obj !== null && obj !== undef && typeof obj === "object";
         }
-    }
 
-    function setter(name, val) {
-        var setters = this.__setters__;
-        if (setters.hasOwnProperty(name)) {
-            return setters[name].apply(this, argsToArray(arguments, 1));
-        } else {
-            return this[name] = val;
+        function isHash(obj) {
+            var ret = isObject(obj);
+            return ret && obj.constructor === Object;
         }
-    }
 
-
-    function defaultFunction() {
-        var meta = this.__meta || {},
-            supers = meta.supers,
-            l = supers.length, superMeta = meta.superMeta, pos = superMeta.pos;
-        if (l > pos) {
-            var name = superMeta.name, f = superMeta.f, m;
-            do {
-                m = supers[pos][name];
-                if ("function" === typeof m && (m = m._f || m) !== f) {
-                    superMeta.pos = 1 + pos;
-                    return m.apply(this, arguments);
-                }
-            } while (l > ++pos);
-        }
-        return null;
-    }
-
-
-    function functionWrapper(f, name) {
-        var wrapper = function wrapper() {
-            var ret, meta = this.__meta || {};
-            var orig = meta.superMeta;
-            meta.superMeta = {f:f, pos:0, name:name};
-            ret = f.apply(this, arguments);
-            meta.superMeta = orig;
-            return ret;
-        };
-        wrapper._f = f;
-        return wrapper;
-    }
-
-
-    /**
-     * @ignore
-     */
-    function defineMixinProps(child, proto) {
-
-        var operations = proto.setters || {}, __setters = child.__setters__, __getters = child.__getters__;
-        for (var i in operations) {
-            if (!__setters.hasOwnProperty(i)) {  //make sure that the setter isnt already there
-                __setters[i] = operations[i];
-            }
-        }
-        operations = proto.getters || {};
-        for (i in operations) {
-            if (!__getters.hasOwnProperty(i)) {  //make sure that the setter isnt already there
-                __getters[i] = operations[i];
-            }
-        }
-        for (var j in proto) {
-            if (j != "getters" && j != "setters") {
-                var p = proto[j];
-                if ("function" === typeof p) {
-                    if (!child.hasOwnProperty(j)) {
-                        child[j] = functionWrapper(defaultFunction, j);
+        function callSuper(args, a) {
+            var meta = this.__meta,
+                supers = meta.supers,
+                l = supers.length, superMeta = meta.superMeta, pos = superMeta.pos;
+            if (l > pos) {
+                a && (args = a);
+                var name = superMeta.name, f = superMeta.f, m;
+                do {
+                    m = supers[pos][name];
+                    if ("function" === typeof m && (m = m._f || m) !== f) {
+                        superMeta.pos = 1 + pos;
+                        return m.apply(this, args);
                     }
+                } while (l > ++pos);
+            }
+            return null;
+        }
+
+        function getSuper() {
+            var meta = this.__meta,
+                supers = meta.supers,
+                l = supers.length, superMeta = meta.superMeta, pos = superMeta.pos;
+            if (l > pos) {
+                var name = superMeta.name, f = superMeta.f, m;
+                do {
+                    m = supers[pos][name];
+                    if ("function" === typeof m && (m = m._f || m) !== f) {
+                        superMeta.pos = 1 + pos;
+                        return m.bind(this);
+                    }
+                } while (l > ++pos);
+            }
+            return null;
+        }
+
+        function getter(name) {
+            var getters = this.__getters__;
+            if (getters.hasOwnProperty(name)) {
+                return getters[name].apply(this);
+            } else {
+                return this[name];
+            }
+        }
+
+        function setter(name, val) {
+            var setters = this.__setters__;
+            if (isHash(name)) {
+                for (var i in name) {
+                    var prop = name[i];
+                    if (setters.hasOwnProperty(i)) {
+                        setters[name].call(this, prop);
+                    } else {
+                        this[i] = prop;
+                    }
+                }
+            } else {
+                if (setters.hasOwnProperty(name)) {
+                    return setters[name].apply(this, argsToArray(arguments, 1));
                 } else {
-                    child[j] = p;
+                    return this[name] = val;
                 }
             }
         }
-    }
 
 
-    /**
-     * @ignore
-     */
-    function mixin() {
-        var args = argsToArray(arguments), l = args.length;
-        var child = this.prototype, childMeta = child.__meta, thisMeta = this.__meta, bases = child.__meta.bases, staticBases = bases.slice(),
-            staticSupers = thisMeta.supers || [], supers = childMeta.supers || [];
-        for (var i = 0; i < l; i++) {
-            var m = args[i], mProto = m.prototype;
-            var protoMeta = mProto.__meta, meta = m.__meta;
-            !protoMeta && (protoMeta = (mProto.__meta = {proto:mProto || {}}));
-            !meta && (meta = (m.__meta = {proto:m.__proto__ || {}}));
-            defineMixinProps(child, protoMeta.proto || {});
-            defineMixinProps(this, meta.proto || {});
-            //copy the bases for static,
-
-            mixinSupers(m.prototype, supers, bases);
-            mixinSupers(m, staticSupers, staticBases);
-        }
-        return this;
-    }
-
-    /**
-     * @ignore
-     */
-    function mixinSupers(sup, arr, bases) {
-        var meta = sup.__meta;
-        !meta && (meta = (sup.__meta = {}));
-        var unique = sup.__meta.unique;
-        !unique && (meta.unique = "declare" + ++classCounter);
-        //check it we already have this super mixed into our prototype chain
-        //if true then we have already looped their supers!
-        if (bases.indexOf(unique) == -1) {
-            //add their id to our bases
-            bases.push(unique);
-            var supers = sup.__meta.supers || [], i = supers.length - 1 || 0;
-            while (i >= 0) {
-                mixinSupers(supers[i--], arr, bases);
+        function defaultFunction() {
+            var meta = this.__meta || {},
+                supers = meta.supers,
+                l = supers.length, superMeta = meta.superMeta, pos = superMeta.pos;
+            if (l > pos) {
+                var name = superMeta.name, f = superMeta.f, m;
+                do {
+                    m = supers[pos][name];
+                    if ("function" === typeof m && (m = m._f || m) !== f) {
+                        superMeta.pos = 1 + pos;
+                        return m.apply(this, arguments);
+                    }
+                } while (l > ++pos);
             }
-            arr.unshift(sup);
+            return null;
         }
-    }
 
 
-    /**
-     * @ignore
-     */
-    function defineProps(child, proto) {
-        var operations = proto.setters,
-            __setters = child.__setters__,
-            __getters = child.__getters__;
-        if (operations) {
+        function functionWrapper(f, name) {
+            var wrapper = function wrapper() {
+                var ret, meta = this.__meta || {};
+                var orig = meta.superMeta;
+                meta.superMeta = {f:f, pos:0, name:name};
+                ret = f.apply(this, arguments);
+                meta.superMeta = orig;
+                return ret;
+            };
+            wrapper._f = f;
+            return wrapper;
+        }
+
+        function defineMixinProps(child, proto) {
+
+            var operations = proto.setters || {}, __setters = child.__setters__, __getters = child.__getters__;
             for (var i in operations) {
-                __setters[i] = operations[i];
+                if (!__setters.hasOwnProperty(i)) {  //make sure that the setter isnt already there
+                    __setters[i] = operations[i];
+                }
             }
-        }
-        operations = proto.getters || {};
-        if (operations) {
+            operations = proto.getters || {};
             for (i in operations) {
-                __getters[i] = operations[i];
+                if (!__getters.hasOwnProperty(i)) {  //make sure that the setter isnt already there
+                    __getters[i] = operations[i];
+                }
+            }
+            for (var j in proto) {
+                if (j != "getters" && j != "setters") {
+                    var p = proto[j];
+                    if ("function" === typeof p) {
+                        if (!child.hasOwnProperty(j)) {
+                            child[j] = functionWrapper(defaultFunction, j);
+                        }
+                    } else {
+                        child[j] = p;
+                    }
+                }
             }
         }
-        for (i in proto) {
-            if (i != "getters" && i != "setters") {
-                var f = proto[i];
-                if ("function" === typeof f) {
-                    var meta = f.__meta || {};
-                    if (!meta.isConstructor) {
-                        child[i] = functionWrapper(f, i);
+
+        function mixin() {
+            var args = argsToArray(arguments), l = args.length;
+            var child = this.prototype, childMeta = child.__meta, thisMeta = this.__meta, bases = child.__meta.bases, staticBases = bases.slice(),
+                staticSupers = thisMeta.supers || [], supers = childMeta.supers || [];
+            for (var i = 0; i < l; i++) {
+                var m = args[i], mProto = m.prototype;
+                var protoMeta = mProto.__meta, meta = m.__meta;
+                !protoMeta && (protoMeta = (mProto.__meta = {proto:mProto || {}}));
+                !meta && (meta = (m.__meta = {proto:m.__proto__ || {}}));
+                defineMixinProps(child, protoMeta.proto || {});
+                defineMixinProps(this, meta.proto || {});
+                //copy the bases for static,
+
+                mixinSupers(m.prototype, supers, bases);
+                mixinSupers(m, staticSupers, staticBases);
+            }
+            return this;
+        }
+
+        function mixinSupers(sup, arr, bases) {
+            var meta = sup.__meta;
+            !meta && (meta = (sup.__meta = {}));
+            var unique = sup.__meta.unique;
+            !unique && (meta.unique = "declare" + ++classCounter);
+            //check it we already have this super mixed into our prototype chain
+            //if true then we have already looped their supers!
+            if (bases.indexOf(unique) == -1) {
+                //add their id to our bases
+                bases.push(unique);
+                var supers = sup.__meta.supers || [], i = supers.length - 1 || 0;
+                while (i >= 0) {
+                    mixinSupers(supers[i--], arr, bases);
+                }
+                arr.unshift(sup);
+            }
+        }
+
+        function defineProps(child, proto) {
+            var operations = proto.setters,
+                __setters = child.__setters__,
+                __getters = child.__getters__;
+            if (operations) {
+                for (var i in operations) {
+                    __setters[i] = operations[i];
+                }
+            }
+            operations = proto.getters || {};
+            if (operations) {
+                for (i in operations) {
+                    __getters[i] = operations[i];
+                }
+            }
+            for (i in proto) {
+                if (i != "getters" && i != "setters") {
+                    var f = proto[i];
+                    if ("function" === typeof f) {
+                        var meta = f.__meta || {};
+                        if (!meta.isConstructor) {
+                            child[i] = functionWrapper(f, i);
+                        } else {
+                            child[i] = f;
+                        }
                     } else {
                         child[i] = f;
                     }
-                } else {
-                    child[i] = f;
                 }
             }
+
         }
 
-    }
-
-    function _export(obj, name) {
-        if (obj && name) {
-            obj[name] = this;
-        } else {
-            obj.exports = obj = this;
-        }
-        return this;
-    }
-
-    function extend(proto) {
-        return declare(this, proto);
-    }
-
-
-    /**
-     * @ignore
-     */
-    function __declare(child, sup, proto) {
-        var childProto = child.prototype, supers = [];
-        var unique = "declare" + ++classCounter, bases = [], staticBases = [];
-        var instanceSupers = [], staticSupers = [];
-        var meta = childProto.__meta = {
-            supers:instanceSupers,
-            unique:unique,
-            bases:bases,
-            superMeta:{
-                f:null,
-                pos:0,
-                name:null
+        function _export(obj, name) {
+            if (obj && name) {
+                obj[name] = this;
+            } else {
+                obj.exports = obj = this;
             }
-        };
-        var childMeta = child.__meta = {
-            supers:staticSupers,
-            unique:unique,
-            bases:staticBases,
-            isConstructor:true,
-            superMeta:{
-                f:null,
-                pos:0,
-                name:null
+            return this;
+        }
+
+        function extend(proto) {
+            return declare(this, proto);
+        }
+
+
+        function __declare(child, sup, proto) {
+            var childProto = child.prototype, supers = [];
+            var unique = "declare" + ++classCounter, bases = [], staticBases = [];
+            var instanceSupers = [], staticSupers = [];
+            var meta = childProto.__meta = {
+                supers:instanceSupers,
+                unique:unique,
+                bases:bases,
+                superMeta:{
+                    f:null,
+                    pos:0,
+                    name:null
+                }
+            };
+            var childMeta = child.__meta = {
+                supers:staticSupers,
+                unique:unique,
+                bases:staticBases,
+                isConstructor:true,
+                superMeta:{
+                    f:null,
+                    pos:0,
+                    name:null
+                }
+            };
+
+            if (isHash(sup) && !proto) {
+                proto = sup;
+                sup = Base;
             }
-        };
 
-        if (isHash(sup) && !proto) {
-            proto = sup;
-            sup = Base;
+            if ("function" === typeof sup || isArray(sup)) {
+                supers = isArray(sup) ? sup : [sup];
+                sup = supers.shift();
+                child.__proto__ = sup;
+                childProto.__proto__ = sup.prototype;
+                mixinSupers(sup.prototype, instanceSupers, bases),
+                    mixinSupers(sup, staticSupers, staticBases);
+            } else {
+                childProto.__getters__ = childProto.__getters__ || {};
+                childProto.__setters__ = childProto.__setters__ || {};
+                child.__getters__ = child.__getters__ || {};
+                child.__setters__ = child.__setters__ || {};
+            }
+            if (proto) {
+                var instance = meta.proto = proto.instance || {};
+                !instance.hasOwnProperty("constructor") && (instance.constructor = defaultFunction);
+                var stat = childMeta.proto = proto.static || {};
+                stat.init = stat.init || defaultFunction;
+                defineProps(childProto, instance, false);
+                defineProps(child, stat, true);
+            } else {
+                meta.proto = {};
+                childMeta.proto = {};
+                child.init = functionWrapper(defaultFunction, "init");
+                childProto.constructor = functionWrapper(defaultFunction, "constructor");
+            }
+            if (supers.length) {
+                mixin.apply(child, supers);
+            }
+            childProto._super = child._super = callSuper;
+            childProto._getSuper = child._getSuper = getSuper;
+            childProto._static = child;
         }
 
-        if ("function" === typeof sup || isArray(sup)) {
-            supers = isArray(sup) ? sup : [sup];
-            sup = supers.shift();
-            child.__proto__ = sup;
-            childProto.__proto__ = sup.prototype;
-            mixinSupers(sup.prototype, instanceSupers, bases),
-                mixinSupers(sup, staticSupers, staticBases);
-        } else {
-            childProto.__getters__ = childProto.__getters__ || {};
-            childProto.__setters__ = childProto.__setters__ || {};
-            child.__getters__ = child.__getters__ || {};
-            child.__setters__ = child.__setters__ || {};
-        }
-        if (proto) {
-            var instance = meta.proto = proto.instance || {};
-            !instance.hasOwnProperty("constructor") && (instance.constructor = defaultFunction);
-            var stat = childMeta.proto = proto.static || {};
-            stat.init = stat.init || defaultFunction;
-            defineProps(childProto, instance, false);
-            defineProps(child, stat, true);
-        } else {
-            meta.proto = {};
-            childMeta.proto = {};
-            child.init = functionWrapper(defaultFunction, "init");
-            childProto.constructor = functionWrapper(defaultFunction, "constructor");
-        }
-        if (supers.length) {
-            mixin.apply(child, supers);
-        }
-        childProto._super = child._super = callSuper;
-        childProto._getSuper = child._getSuper = getSuper;
-        childProto._static = child;
-    }
-
-    function declare(sup, proto) {
-        var child = function () {
-            this.constructor.apply(this, arguments);
-        };
-        __declare(child, sup, proto);
-        return child.init() || child;
-    }
-
-    function singleton(sup, proto) {
-        var retInstance;
-        var child = function () {
-            if (!retInstance) {
+        function declare(sup, proto) {
+            function declared() {
                 this.constructor.apply(this, arguments);
-                retInstance = this;
             }
-            return retInstance;
-        };
-        __declare(child, sup, proto);
-        return  child.init() || child;
+
+            __declare(declared, sup, proto);
+            return declared.init() || declared;
+        }
+
+        function singleton(sup, proto) {
+            var retInstance;
+
+            function declaredSingleton() {
+                if (!retInstance) {
+                    this.constructor.apply(this, arguments);
+                    retInstance = this;
+                }
+                return retInstance;
+            }
+
+            __declare(declaredSingleton, sup, proto);
+            return  declaredSingleton.init() || declaredSingleton;
+        }
+
+        Base = declare({
+            instance:{
+                "get":getter,
+                "set":setter
+            },
+
+            "static":{
+                "get":getter,
+                "set":setter,
+                mixin:mixin,
+                extend:extend,
+                as:_export
+            }
+        });
+
+        declare.singleton = singleton;
+        return declare;
     }
 
-    var Base = declare({
-        instance:{
-            "get":getter,
-            "set":setter
-        },
-
-        "static":{
-            "get":getter,
-            "set":setter,
-            mixin:mixin,
-            extend:extend,
-            as:_export
+    if ("undefined" !== typeof exports) {
+        if ("undefined" !== typeof module && module.exports) {
+            module.exports = createDeclared();
         }
-    });
-
-    declare.singleton = singleton;
-
-    if (typeof exports !== 'undefined') {
-        if (typeof module !== 'undefined' && module.exports) {
-            exports = module.exports = declare;
-        }
-        exports.declare = declare;
+    } else if ("function" === typeof define) {
+        define(createDeclared);
     } else {
-        this.declare = declare;
+        this.declare = createDeclared();
     }
 }());
 

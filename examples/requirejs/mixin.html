@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mixin</title>
+    <!-- data-main attribute tells require.js to load
+scripts/main.js after require.js loads. -->
+    <script data-main="scripts/main" src="scripts/require.js"></script>
+</head>
+<body>
+<div id="output"></div>
+
+<script type="text/javascript">
+    require([
+        'mixin/watchDog'
+    ], function (WatchDog) {
+
+        var outputDiv = document.getElementById("output");
+
+        function log(str) {
+            outputDiv.innerText += str + "\n";
+        }
+
+        var watchDog = new WatchDog();
+
+        function watch(id, oldVal, newVal) {
+            log("watchdog's " + id + " was " + oldVal + ", now " + newVal);
+        }
+
+
+        watchDog.watch("type", watch);
+        watchDog.watch("color", watch);
+        watchDog.watch("sound", watch);
+
+        watchDog.set("type", "newDog");
+        watchDog.set("color", "newColor");
+        watchDog.set("sound", "newSound");
+
+        watchDog.unwatch("type", watch);
+        watchDog.unwatch("color", watch);
+        watchDog.unwatch("sound", watch);
+
+        watchDog.set("type", "newDog");
+        watchDog.set("color", "newColor");
+        watchDog.set("sound", "newSound");
+
+
+    })
+</script>
+</body>
+</html>

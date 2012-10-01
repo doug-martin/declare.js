@@ -1,22 +1,25 @@
 {
-  "name": "declare.js",
-  "version": "0.0.1",
-  "description": "OO system from node and browser",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:doug-martin/declare.js.git"
-  },
-  "keywords": [
-    "OO",
-    "class",
-    "object",
-    "clazz",
-    ""
-  ],
-  "author": "Doug Martin (doug@dougamartin.com)",
-  "license": "MIT"
+    "name":"declare.js",
+    "version":"0.0.1",
+    "description":"OO system from node and browser",
+    "main":"declare.js",
+    "scripts":{
+        "test":"echo \"Error: no test specified\" && exit 1"
+    },
+    "repository":{
+        "type":"git",
+        "url":"git@github.com:doug-martin/declare.js.git"
+    },
+    "keywords":[
+        "OO",
+        "class",
+        "object",
+        "clazz",
+        ""
+    ],
+    "author":"Doug Martin (doug@dougamartin.com)",
+    "license":"MIT",
+    "devDependencies":{
+        "it":"0.0.5"
+    }
 }

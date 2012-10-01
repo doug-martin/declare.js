@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inheritance</title>
+    <!-- data-main attribute tells require.js to load
+scripts/main.js after require.js loads. -->
+    <script data-main="scripts/main" src="scripts/require.js"></script>
+</head>
+<body>
+<div id="output"></div>
+
+<script type="text/javascript">
+    require([
+        'inheritance/mammal',
+        'inheritance/wolf',
+        'inheritance/dog',
+        'inheritance/breed'
+    ], function (Mammal, Wolf, Dog, Breed) {
+
+        var outputDiv = document.getElementById("output");
+
+        function log(str) {
+            outputDiv.innerText += str + "\n";
+        }
+
+        log(Mammal.soundOff("Im a mammal!!"));
+
+        var myMammal = new Mammal({type:"mymammal"});
+        log(myMammal.speak()); // "A mammal of type mymammal sounds like"
+        log(myMammal.get("type")); //"mymammal"
+        myMammal.set("type", "mammal");
+        log(myMammal.get("type")); //"mammal"
+
+        log(Wolf.soundOff()); //Im a mammal!! that growls
+
+        var myWolf = new Wolf();
+        log(myWolf instanceof Mammal); //true
+        log(myWolf instanceof Wolf); //true
+
+        log(Dog.soundOff()); //Im a mammal!! that growls but now barks
+
+        var myDog = new Dog();
+        log(myDog instanceof Mammal); //true
+        log(myDog instanceof Wolf); //true
+        log(myDog instanceof Dog); //true
+
+        log(Breed.soundOff());//"IM A MAMMAL!! THAT GROWLS BUT NOW BARKS!"
+
+        var myBreed = new Breed({color:"gold", type:"lab"});
+        log(myBreed instanceof Dog); //true
+        log(myBreed instanceof Wolf); //true
+        log(myBreed instanceof Mammal); //true
+        log(myBreed.speak()); //"A mammal of type lab sounds like a woof thats domesticated with a high pitch!"
+        log(myBreed.get("type")); //"lab"
+        log(myBreed.get("color")); //"gold"
+        log(myBreed.get("sound")); //"woof"
+
+    })
+</script>
+</body>
+</html>
