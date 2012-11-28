@@ -1,10 +1,10 @@
 {
     "name":"declare.js",
-    "version":"0.0.1",
+    "version":"0.0.22",
     "description":"OO system from node and browser",
     "main":"index.js",
     "scripts":{
-        "test":"echo \"Error: no test specified\" && exit 1"
+        "test":"export NODE_PATH=. && it -r dotmatrix"
     },
     "repository":{
         "type":"git",
@@ -20,6 +20,6 @@
     "author":"Doug Martin (doug@dougamartin.com)",
     "license":"MIT",
     "devDependencies":{
-        "it":"0.0.5"
+        "it":"0.1.0"
     }
 }

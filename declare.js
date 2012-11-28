@@ -495,6 +495,17 @@
             return ret && obj.constructor === Object;
         }
 
+        function merge(target, source) {
+            var name, s;
+            for (name in source) {
+                s = source[name];
+                if (!(name in target) || (target[name] !== s)) {
+                    target[name] = s;
+                }
+            }
+            return target;
+        }
+
         function callSuper(args, a) {
             var meta = this.__meta,
                 supers = meta.supers,
@@ -582,7 +593,7 @@
             var wrapper = function wrapper() {
                 var ret, meta = this.__meta || {};
                 var orig = meta.superMeta;
-                meta.superMeta = {f:f, pos:0, name:name};
+                meta.superMeta = {f: f, pos: 0, name: name};
                 ret = f.apply(this, arguments);
                 meta.superMeta = orig;
                 return ret;
@@ -626,8 +637,8 @@
             for (var i = 0; i < l; i++) {
                 var m = args[i], mProto = m.prototype;
                 var protoMeta = mProto.__meta, meta = m.__meta;
-                !protoMeta && (protoMeta = (mProto.__meta = {proto:mProto || {}}));
-                !meta && (meta = (m.__meta = {proto:m.__proto__ || {}}));
+                !protoMeta && (protoMeta = (mProto.__meta = {proto: mProto || {}}));
+                !meta && (meta = (m.__meta = {proto: m.__proto__ || {}}));
                 defineMixinProps(child, protoMeta.proto || {});
                 defineMixinProps(this, meta.proto || {});
                 //copy the bases for static,
@@ -708,24 +719,24 @@
             var unique = "declare" + ++classCounter, bases = [], staticBases = [];
             var instanceSupers = [], staticSupers = [];
             var meta = childProto.__meta = {
-                supers:instanceSupers,
-                unique:unique,
-                bases:bases,
-                superMeta:{
-                    f:null,
-                    pos:0,
-                    name:null
+                supers: instanceSupers,
+                unique: unique,
+                bases: bases,
+                superMeta: {
+                    f: null,
+                    pos: 0,
+                    name: null
                 }
             };
             var childMeta = child.__meta = {
-                supers:staticSupers,
-                unique:unique,
-                bases:staticBases,
-                isConstructor:true,
-                superMeta:{
-                    f:null,
-                    pos:0,
-                    name:null
+                supers: staticSupers,
+                unique: unique,
+                bases: staticBases,
+                isConstructor: true,
+                superMeta: {
+                    f: null,
+                    pos: 0,
+                    name: null
                 }
             };
 
@@ -739,6 +750,10 @@
                 sup = supers.shift();
                 child.__proto__ = sup;
                 childProto.__proto__ = sup.prototype;
+                childProto.__getters__ = merge({}, childProto.__getters__ || {});
+                childProto.__setters__ = merge({}, childProto.__setters__ || {});
+                child.__getters__ = merge({}, child.__getters__ || {});
+                child.__setters__ = merge({}, child.__setters__ || {});
                 mixinSupers(sup.prototype, instanceSupers, bases),
                     mixinSupers(sup, staticSupers, staticBases);
             } else {
@@ -793,17 +808,17 @@
         }
 
         Base = declare({
-            instance:{
-                "get":getter,
-                "set":setter
+            instance: {
+                "get": getter,
+                "set": setter
             },
 
-            "static":{
-                "get":getter,
-                "set":setter,
-                mixin:mixin,
-                extend:extend,
-                as:_export
+            "static": {
+                "get": getter,
+                "set": setter,
+                mixin: mixin,
+                extend: extend,
+                as: _export
             }
         });
 
