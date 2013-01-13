@@ -1,7 +1,7 @@
 "use strict";
 var it = require('it'),
     assert = require('assert'),
-    declare = require("index"),
+    declare = require("../declare"),
     singleton = declare.singleton;
 
 it.describe("declare",function (it) {

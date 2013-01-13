@@ -474,7 +474,7 @@
      *
      */
     function createDeclared() {
-        var arraySlice = Array.prototype.slice, classCounter = 0, Base;
+        var arraySlice = Array.prototype.slice, classCounter = 0, Base, forceNew = new Function();
 
         function argsToArray(args, slice) {
             slice = slice || 0;
@@ -495,12 +495,25 @@
             return ret && obj.constructor === Object;
         }
 
-        function merge(target, source) {
+        function indexOf(arr, item) {
+            if (arr && arr.length) {
+                for (var i = 0, l = arr.length; i < l; i++) {
+                    if (arr[i] === item) {
+                        return i;
+                    }
+                }
+            }
+            return -1;
+        }
+
+        function merge(target, source, exclude) {
             var name, s;
             for (name in source) {
-                s = source[name];
-                if (!(name in target) || (target[name] !== s)) {
-                    target[name] = s;
+                if (source.hasOwnProperty(name) && indexOf(exclude, name) === -1) {
+                    s = source[name];
+                    if (!(name in target) || (target[name] !== s)) {
+                        target[name] = s;
+                    }
                 }
             }
             return target;
@@ -632,7 +645,8 @@
 
         function mixin() {
             var args = argsToArray(arguments), l = args.length;
-            var child = this.prototype, childMeta = child.__meta, thisMeta = this.__meta, bases = child.__meta.bases, staticBases = bases.slice(),
+            var child = this.prototype;
+            var childMeta = child.__meta, thisMeta = this.__meta, bases = child.__meta.bases, staticBases = bases.slice(),
                 staticSupers = thisMeta.supers || [], supers = childMeta.supers || [];
             for (var i = 0; i < l; i++) {
                 var m = args[i], mProto = m.prototype;
@@ -656,7 +670,7 @@
             !unique && (meta.unique = "declare" + ++classCounter);
             //check it we already have this super mixed into our prototype chain
             //if true then we have already looped their supers!
-            if (bases.indexOf(unique) == -1) {
+            if (indexOf(bases, unique) === -1) {
                 //add their id to our bases
                 bases.push(unique);
                 var supers = sup.__meta.supers || [], i = supers.length - 1 || 0;
@@ -713,12 +727,21 @@
             return declare(this, proto);
         }
 
+        function getNew(ctor) {
+            // create object with correct prototype using a do-nothing
+            // constructor
+            forceNew.prototype = ctor.prototype;
+            var t = new forceNew();
+            forceNew.prototype = null;	// clean up
+            return t;
+        }
+
 
         function __declare(child, sup, proto) {
-            var childProto = child.prototype, supers = [];
+            var childProto = {}, supers = [];
             var unique = "declare" + ++classCounter, bases = [], staticBases = [];
             var instanceSupers = [], staticSupers = [];
-            var meta = childProto.__meta = {
+            var meta = {
                 supers: instanceSupers,
                 unique: unique,
                 bases: bases,
@@ -728,7 +751,7 @@
                     name: null
                 }
             };
-            var childMeta = child.__meta = {
+            var childMeta = {
                 supers: staticSupers,
                 unique: unique,
                 bases: staticBases,
@@ -748,27 +771,31 @@
             if ("function" === typeof sup || isArray(sup)) {
                 supers = isArray(sup) ? sup : [sup];
                 sup = supers.shift();
-                child.__proto__ = sup;
-                childProto.__proto__ = sup.prototype;
+                child.__meta = childMeta;
+                childProto = getNew(sup);
+                childProto.__meta = meta;
                 childProto.__getters__ = merge({}, childProto.__getters__ || {});
                 childProto.__setters__ = merge({}, childProto.__setters__ || {});
                 child.__getters__ = merge({}, child.__getters__ || {});
                 child.__setters__ = merge({}, child.__setters__ || {});
-                mixinSupers(sup.prototype, instanceSupers, bases),
-                    mixinSupers(sup, staticSupers, staticBases);
+                mixinSupers(sup.prototype, instanceSupers, bases);
+                mixinSupers(sup, staticSupers, staticBases);
             } else {
+                child.__meta = childMeta;
+                childProto.__meta = meta;
                 childProto.__getters__ = childProto.__getters__ || {};
                 childProto.__setters__ = childProto.__setters__ || {};
                 child.__getters__ = child.__getters__ || {};
                 child.__setters__ = child.__setters__ || {};
             }
+            child.prototype = childProto;
             if (proto) {
                 var instance = meta.proto = proto.instance || {};
                 !instance.hasOwnProperty("constructor") && (instance.constructor = defaultFunction);
                 var stat = childMeta.proto = proto.static || {};
                 stat.init = stat.init || defaultFunction;
-                defineProps(childProto, instance, false);
-                defineProps(child, stat, true);
+                defineProps(childProto, instance);
+                defineProps(child, stat);
             } else {
                 meta.proto = {};
                 childMeta.proto = {};
@@ -777,6 +804,10 @@
             }
             if (supers.length) {
                 mixin.apply(child, supers);
+            }
+            if (sup) {
+                //do this so we mixin our super methods directly but do not ov
+                merge(child, merge(merge({}, sup), child));
             }
             childProto._super = child._super = callSuper;
             childProto._getSuper = child._getSuper = getSuper;

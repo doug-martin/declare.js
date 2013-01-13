@@ -9,13 +9,13 @@
 
 <div id="output"></div>
 
-<script type="text/javascript" src="../../declare-min.js"></script>
+<script type="text/javascript" src="../../declare.js"></script>
 <script type="text/javascript">
 function init() {
     var outputDiv = document.getElementById("output");
 
     function log(str) {
-        outputDiv.innerText += str + "\n";
+        outputDiv.innerHTML += str + "</br>";
     }
 
     var Mammal = declare({
