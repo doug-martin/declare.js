@@ -405,6 +405,6 @@ it.describe("declare",function (it) {
         });
     });
 
-}).as(module).run();
+}).as(module);
 
 

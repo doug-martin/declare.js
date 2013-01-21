@@ -1,25 +1,35 @@
 {
-    "name":"declare.js",
-    "version":"0.0.3",
-    "description":"OO system from node and browser",
-    "main":"index.js",
-    "scripts":{
-        "test":"export NODE_PATH=. && it -r dotmatrix"
+    "name": "declare.js",
+    "version": "0.0.3",
+    "description": "OO system from node and browser",
+    "main": "index.js",
+    "scripts": {
+        "test": "export NODE_PATH=. && it -r dotmatrix"
     },
-    "repository":{
-        "type":"git",
-        "url":"git@github.com:doug-martin/declare.js.git"
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:doug-martin/declare.js.git"
     },
-    "keywords":[
+    "keywords": [
         "OO",
         "class",
         "object",
         "clazz",
         ""
     ],
-    "author":"Doug Martin (doug@dougamartin.com)",
-    "license":"MIT",
-    "devDependencies":{
-        "it":"0.1.0"
+    "testling": {
+        "files": "test/browserling.js",
+        "browsers": {
+            "ie": [6, 7, 8, 9],
+            "chrome": [4, 23, "canary"],
+            "firefox": [3, 3.5, 3.6, 4, 17, "nightly"],
+            "opera": [10, 10.5, 11, 11.5, 11.6, 12, "next"],
+            "safari": ["5.0.1", 5.1]
+        }
+    },
+    "author": "Doug Martin (doug@dougamartin.com)",
+    "license": "MIT",
+    "devDependencies": {
+        "it": "0.2.0"
     }
 }

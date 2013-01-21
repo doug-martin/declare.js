@@ -1,7 +1,11 @@
+[![Build Status](https://travis-ci.org/doug-martin/declare.js.png?branch=master)](undefined)
+
+[![browser support](http://ci.testling.com/doug-martin/declare.js.png)](http://ci.testling.com/doug-martin/declare.js)
+
 <a name="top"></a>
 
 
-  Declare is a library designed to allow writing object oriented code the same way in both the browser and node.js.
+Declare is a library designed to allow writing object oriented code the same way in both the browser and node.js.
 
 ##Installation
 
