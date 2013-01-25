@@ -391,6 +391,59 @@ it.describe("declare",function (it) {
         assert.instanceOf(new WrappedClass.DogMammal(), Dog);
     });
 
+    it.describe("#_super", function (it) {
+
+        it.should("allow calling with out arguments", function () {
+            var Cls = Mammal.extend({
+                instance: {
+                    speak: function () {
+                        return this._super();
+                    }
+                }
+            });
+            assert.equal(new Cls().speak(), "A mammal of type mammal sounds like")
+
+        });
+
+        it.should("allow calling super a string argument", function () {
+            var Cls = Mammal.extend({
+                instance: {
+                    speak: function () {
+                        return this._super("hello");
+                    }
+                }
+            });
+            assert.equal(new Cls().speak(), "A mammal of type mammal sounds like")
+
+        });
+
+        it.should("allow calling super with null", function () {
+            var Cls = Mammal.extend({
+                instance: {
+                    speak: function () {
+                        return this._super(null);
+                    }
+                }
+            });
+            assert.equal(new Cls().speak(), "A mammal of type mammal sounds like")
+
+        });
+
+        it.should("allow calling super with undefined", function () {
+            var x;
+            var Cls = Mammal.extend({
+                instance: {
+                    speak: function () {
+                        return this._super(x);
+                    }
+                }
+            });
+            assert.equal(new Cls().speak(), "A mammal of type mammal sounds like")
+
+        });
+
+    });
+
 
     it.describe("#as", function (it) {
 
@@ -406,5 +459,6 @@ it.describe("declare",function (it) {
     });
 
 }).as(module);
+
 
 

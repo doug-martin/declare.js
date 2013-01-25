@@ -495,6 +495,16 @@
             return ret && obj.constructor === Object;
         }
 
+        var isArguments = function _isArguments(object) {
+            return Object.prototype.toString.call(object) === '[object Arguments]';
+        };
+
+        if (!isArguments(arguments)) {
+            isArguments = function _isArguments(obj) {
+                return !!(obj && obj.hasOwnProperty("callee"));
+            };
+        }
+
         function indexOf(arr, item) {
             if (arr && arr.length) {
                 for (var i = 0, l = arr.length; i < l; i++) {
@@ -524,7 +534,7 @@
                 supers = meta.supers,
                 l = supers.length, superMeta = meta.superMeta, pos = superMeta.pos;
             if (l > pos) {
-                a && (args = a);
+                args = !args ? [] : (!isArguments(args) && !isArray(args)) ? [args] : args;
                 var name = superMeta.name, f = superMeta.f, m;
                 do {
                     m = supers[pos][name];
@@ -534,6 +544,7 @@
                     }
                 } while (l > ++pos);
             }
+
             return null;
         }
 
@@ -630,7 +641,7 @@
                 }
             }
             for (var j in proto) {
-                if (j != "getters" && j != "setters") {
+                if (j !== "getters" && j !== "setters") {
                     var p = proto[j];
                     if ("function" === typeof p) {
                         if (!child.hasOwnProperty(j)) {
