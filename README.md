@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/doug-martin/declare.js.png?branch=master)](undefined)
+[![Build Status](https://travis-ci.org/doug-martin/declare.js.png?branch=master)](https://travis-ci.org/doug-martin/declare.js)
 
-[![browser support](http://ci.testling.com/doug-martin/declare.js.png)](http://ci.testling.com/doug-martin/declare.js)
+[![browser support](https://ci.testling.com/doug-martin/declare.js.png)](https://ci.testling.com/doug-martin/declare.js)
 
 <a name="top"></a>
 

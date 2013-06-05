@@ -876,7 +876,7 @@
         if ("undefined" !== typeof module && module.exports) {
             module.exports = createDeclared();
         }
-    } else if ("function" === typeof define) {
+    } else if ("function" === typeof define && define.amd) {
         define(createDeclared);
     } else {
         this.declare = createDeclared();
