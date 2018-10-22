@@ -1,6 +1,6 @@
 {
     "name": "declare.js",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "description": "OO system from node and browser",
     "main": "index.js",
     "scripts": {
