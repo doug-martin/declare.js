@@ -32,8 +32,8 @@
     "license": "MIT",
     "devDependencies": {
         "grunt": "^1.0.3",
-        "grunt-contrib-jshint": "^2.0.0",
-        "grunt-contrib-uglify": "^4.0.0",
+        "grunt-contrib-jshint": "^1.1.0",
+        "grunt-contrib-uglify": "^3.4.0",
         "grunt-it": "^1.0.2",
         "it": "^1.1.1"
     },
