@@ -474,7 +474,7 @@
      *
      */
     function createDeclared() {
-        var arraySlice = Array.prototype.slice, classCounter = 0, Base, forceNew = new Function();
+        var arraySlice = Array.prototype.slice, classCounter = 0, Base, forceNew = function() {};
 
         var SUPER_REGEXP = /(super)/g;
 
