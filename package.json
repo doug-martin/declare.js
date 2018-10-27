@@ -1,6 +1,6 @@
 {
     "name": "declare.js",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "description": "OO system from node and browser",
     "main": "index.js",
     "scripts": {
@@ -31,11 +31,11 @@
     "author": "Doug Martin (doug@dougamartin.com)",
     "license": "MIT",
     "devDependencies": {
-        "it": "0.2.0",
-        "grunt-it": "~0.3.1",
-        "grunt-contrib-uglify": "~0.2.2",
-        "grunt-contrib-jshint": "~0.6.0",
-        "grunt": "~0.4.1"
+        "grunt": "^1.0.3",
+        "grunt-contrib-jshint": "^1.1.0",
+        "grunt-contrib-uglify": "^3.4.0",
+        "grunt-it": "^1.0.2",
+        "it": "^1.1.1"
     },
     "dependencies": {}
 }
